@@ -70,7 +70,6 @@ public class RpcHelper {
                 keywords.add(array.getString(i));
             }
             builder.setKeywords(keywords);
-            builder.setDescription(favoriteItem.getString("description"));
 
         } catch (JSONException e) {
             throw new IllegalArgumentException("Invalid JSON structure", e);

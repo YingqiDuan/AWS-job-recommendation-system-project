@@ -12,7 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import db.MySQLConnection;
 import entity.Item;
-import external.AdzunaClient;
+import external.GitHubClient;
 
 /**
  * Servlet implementation class SearchItem
@@ -33,16 +33,14 @@ public class SearchItem extends HttpServlet {
         }
 
         try {
-        	String userId = request.getParameter("user_id");
-    		
-    		String apiId = request.getParameter("app_id");
-    		String apiKey = request.getParameter("app_key");
-    		String position = request.getParameter("what");
-    		String location = request.getParameter("where");
+            // 获取请求参数中的 user_id, lat 和 lon
+            String userId = request.getParameter("user_id");
+            double lat = Double.parseDouble(request.getParameter("lat"));
+            double lon = Double.parseDouble(request.getParameter("lon"));
 
             // 调用 GitHub API 获取职位列表
-    		AdzunaClient client = new AdzunaClient();
-            List<Item> items = client.search(apiId, apiKey, position, location);
+            GitHubClient client = new GitHubClient();
+            List<Item> items = client.search(lat, lon, null);
 
             // 获取用户收藏的职位ID
             Set<String> favoritedItemIds;
@@ -62,7 +60,7 @@ public class SearchItem extends HttpServlet {
             RpcHelper.writeJsonArray(response, array);
         } catch (NumberFormatException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().println("Invalid location format.");
+            response.getWriter().println("Invalid latitude or longitude format.");
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             e.printStackTrace(response.getWriter());

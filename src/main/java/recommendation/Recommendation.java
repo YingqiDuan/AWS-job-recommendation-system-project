@@ -5,11 +5,11 @@ import java.util.Map.Entry;
 
 import db.MySQLConnection;
 import entity.Item;
-import external.AdzunaClient;
+import external.GitHubClient;
 
 public class Recommendation {
 
-    public List<Item> recommendItems(String userId, String position, String location) {
+    public List<Item> recommendItems(String userId, double lat, double lon) {
         // 初始化推荐列表
         List<Item> recommendedItems = new ArrayList<>();
 
@@ -40,10 +40,10 @@ public class Recommendation {
 
         // Step 3: 基于关键词搜索职位，并过滤掉已收藏的职位
         Set<String> visitedItemIds = new HashSet<>();
-        AdzunaClient client = new AdzunaClient();
+        GitHubClient client = new GitHubClient();
 
         for (Entry<String, Integer> keyword : keywordList) {
-            List<Item> items = client.search(AdzunaClient.APP_ID, AdzunaClient.APP_KEY, position, location);
+            List<Item> items = client.search(lat, lon, keyword.getKey());
 
             for (Item item : items) {
                 // 如果职位尚未被收藏且未访问过，则将其添加到推荐列表中

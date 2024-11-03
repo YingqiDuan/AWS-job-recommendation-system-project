@@ -21,7 +21,6 @@ public class parseFavoriteItemTest {
         json.put("image_url", "http://example.com/laptop.jpg");
         json.put("url", "http://example.com/laptop");
         json.put("keywords", new JSONArray().put("electronics").put("laptop"));
-        json.put("description", "description");
 
         // 调用被测试的方法
         Item item = RpcHelper.parseFavoriteItem(json);
@@ -34,6 +33,5 @@ public class parseFavoriteItemTest {
         assertEquals("http://example.com/laptop", item.getUrl());
         assertTrue(item.getKeywords().contains("electronics"));
         assertTrue(item.getKeywords().contains("laptop"));
-        assertEquals("description", item.getDescription());
     }
 }

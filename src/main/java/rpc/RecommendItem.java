@@ -30,14 +30,14 @@ public class RecommendItem extends HttpServlet {
         }
 
         try {
-        	String userId = request.getParameter("user_id");
-    		
-    		String position = request.getParameter("what");
-    		String location = request.getParameter("where");
+            // 从请求中获取 user_id、lat 和 lon 参数
+            String userId = request.getParameter("user_id");
+            double lat = Double.parseDouble(request.getParameter("lat"));
+            double lon = Double.parseDouble(request.getParameter("lon"));
 
             // 推荐系统生成推荐职位
             Recommendation recommendation = new Recommendation();
-            List<Item> items = recommendation.recommendItems(userId, position, location);
+            List<Item> items = recommendation.recommendItems(userId, lat, lon);
 
             // 构建 JSON 响应
             JSONArray array = new JSONArray();
@@ -46,7 +46,7 @@ public class RecommendItem extends HttpServlet {
             RpcHelper.writeJsonArray(response, array);
         } catch (NumberFormatException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().println("Invalid location format.");
+            response.getWriter().println("Invalid latitude or longitude format.");
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             e.printStackTrace(response.getWriter());

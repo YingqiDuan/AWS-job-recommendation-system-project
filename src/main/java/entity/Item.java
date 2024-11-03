@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Item {
@@ -14,7 +13,6 @@ public class Item {
     private Set<String> keywords;
     private String imageUrl;
     private String url;
-    private String description;
 
     // 私有构造函数，使用 Builder 创建对象
     private Item(ItemBuilder builder) {
@@ -25,7 +23,6 @@ public class Item {
         this.url = builder.url;
         // 使用防御性拷贝，避免外部修改关键字集合
         this.keywords = builder.keywords != null ? new HashSet<>(builder.keywords) : Collections.emptySet();
-        this.description = builder.description;
     }
 
     // 标准的 getter 方法
@@ -52,15 +49,10 @@ public class Item {
     public String getUrl() {
         return url;
     }
-    
-    public String getDescription() {
-        return description;
-    }
 
     // 将对象转换为 JSON
     public JSONObject toJSONObject() {
         JSONObject obj = new JSONObject();
-        try {
         obj.put("item_id", itemId);
         obj.put("name", name);
         obj.put("address", address);
@@ -70,9 +62,6 @@ public class Item {
         }
         obj.put("image_url", imageUrl);
         obj.put("url", url);
-        } catch (JSONException e) {
-        	e.printStackTrace();
-        }
         return obj;
     }
 
@@ -84,7 +73,6 @@ public class Item {
         private String imageUrl;
         private String url;
         private Set<String> keywords;
-        private String description;
 
         // 必需字段，通过构造函数设置
         public ItemBuilder(String itemId, String name) {
@@ -116,20 +104,10 @@ public class Item {
             this.keywords = keywords != null ? new HashSet<>(keywords) : null;
             return this;
         }
-        
-        public ItemBuilder setDescription(String description) {
-        	this.description = description;
-        	return this;
-        }
 
         // 构建 Item 对象
         public Item build() {
             return new Item(this);
         }
     }
-    
-    public void setKeywords(Set<String> set) {
-		// TODO Auto-generated method stub
-		this.keywords = set;
-	}
 }
